@@ -30,7 +30,7 @@ fn maximum_subsequence_sum(nums: Vec<i32>) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::easy::n_0053_maximum_subarray::*;
+    use crate::c_0_easy::n_0053_maximum_subarray::*;
 
     #[test]
     fn case0() {

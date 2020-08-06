@@ -1,4 +1,4 @@
 #![allow(dead_code)]
 mod c_0_easy;
-mod c_1_hard;
-mod c_2_medium;
+mod c_1_medium;
+mod c_2_hard;
