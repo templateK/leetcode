@@ -4,7 +4,7 @@
 *   https://leetcode.com/problems/squares-of-a-sorted-array/
 *
 * Category:
-*
+*     Adhoc programming
 *
 * Question:
 *   Given an array of integers A sorted in non-decreasing order, return an array
@@ -12,55 +12,27 @@
 *
 */
 
-fn sorted_squares(_a: Vec<i32>) -> Vec<i32> {
-    let iter = _a.iter().enumerate();
-    let m = iter.min_by(|(_, a), (_, b)| (*a * *a).cmp(&(*b * *b)));
-    match m {
-        None => vec![],
-        Some((ix, _)) => {
-            let (left, right) = _a.split_at(ix);
-            let mut l_iter = left.iter().rev();
-            let mut r_iter = right.iter();
-            let mut result = vec![];
-            let mut l = l_iter.next();
-            let mut r = r_iter.next();
-            'exit: loop {
-                match (l, r) {
-                    (Some(ll), Some(rr)) => {
-                        let lv = ll * ll;
-                        let rv = rr * rr;
-                        println!("both {}, {}", lv, rv);
-                        if lv < rv {
-                            l = l_iter.next();
-                            result.push(lv);
-                        } else if rv < lv {
-                            r = r_iter.next();
-                            result.push(rv);
-                        } else {
-                            l = l_iter.next();
-                            r = r_iter.next();
-                            result.push(lv);
-                            result.push(rv);
-                        }
-                    }
-                    (Some(ll), None) => {
-                        println!("left {},", ll * ll);
-                        result.push(ll * ll);
-                        l = l_iter.next();
-                    }
-                    (None, Some(rr)) => {
-                        println!("right {},", rr * rr);
-                        result.push(rr * rr);
-                        r = r_iter.next();
-                    }
-                    _ => {
-                        break 'exit;
-                    }
-                }
-            }
-            result
+fn sorted_squares(arr: Vec<i32>) -> Vec<i32> {
+    let mut li = 0;
+    let mut ri = arr.len().saturating_sub(1);
+    let mut ix = arr.len().saturating_sub(1);
+
+    // We store squared values from largest to smallest.
+    // So, we need to allocate the memory ahead of the loop.
+    let mut result = vec![0; arr.len()];
+
+    for _ in 0..arr.len() {
+        // case for li abs value is greater than ri abs value.
+        if arr[li] + arr[ri] <= 0 {
+            result[ix] = arr[li] * arr[li];
+            li += 1;
+        } else {
+            result[ix] = arr[ri] * arr[ri];
+            ri = ri.saturating_sub(1);
         }
+        ix = ix.saturating_sub(1);
     }
+    result
 }
 
 #[cfg(test)]
@@ -77,13 +49,20 @@ mod tests {
 
     #[test]
     fn case1() {
+        let input = vec![1];
+        let result = sorted_squares(input);
+        assert_eq!(result, vec![1]);
+    }
+
+    #[test]
+    fn case2() {
         let input = vec![-3, -1, 2];
         let result = sorted_squares(input);
         assert_eq!(result, vec![1, 4, 9]);
     }
 
     #[test]
-    fn case2() {
+    fn case3() {
         let input = vec![-4, -1, 0, 3, 10];
         println!("input: {:?}", input);
         let result = sorted_squares(input);
