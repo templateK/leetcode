@@ -1,2 +1,3 @@
 mod n_0053_maximum_subarray;
+mod n_0136_single_number_i;
 mod n_0977_squares_of_a_sorted_array;
